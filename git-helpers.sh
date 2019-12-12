@@ -2,14 +2,19 @@
 
 ghi () {
   echo "getting ignore file for" "$1"
-  wget https://raw.githubusercontent.com/github/gitignore/master/"${1}".gitignore
+  filename=$(basename -- "$1")
+  # repo for browsing: https://github.com/github/gitignore
+  wget -O "${filename}".gitignore https://raw.githubusercontent.com/github/gitignore/master/"${1}".gitignore
   echo "appending to .gitignore.."
-  cat "${1}".gitignore >> .gitignore
+  cat "${filename}".gitignore >> .gitignore
   echo "cleaning up downloaded file..."
-  rm "${1}".gitignore
+  rm "${filename}".gitignore
   echo "done!"
 }
 
+#gpr-log () {
+  #git log --name-status "$1".."$2" | grep -E '^[A-Z]\s' | sort | uniq
+#}
 gpr-log () {
-  git log --name-status "$1".."$2" | grep -E '^[A-Z]\s' | sort | uniq
+  git log --name-status "$1" | grep -E '^[A-Z]\s' | sort | uniq
 }
